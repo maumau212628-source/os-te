@@ -1,0 +1,2 @@
+chmod +x addressbook.sh
+./addressbook.sh
