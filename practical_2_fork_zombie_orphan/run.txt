@@ -1,0 +1,5 @@
+gcc part_a_fork_wait.c -o part_a
+./part_a
+
+gcc part_b_zombie_orphan.c -o part_b
+./part_b

@@ -1,0 +1,11 @@
+Open TWO terminals in this folder.
+
+Terminal 1:
+gcc process2.c -o process2
+./process2
+
+Terminal 2:
+gcc process1.c -o process1
+./process1
+
+Type some sentences in Terminal 2, press Enter on an empty line to finish.
