@@ -1,5 +1,0 @@
-gcc part_a_semaphore_mutex.c -o part_a -pthread
-./part_a
-
-gcc part_b_producer_consumer.c -o part_b -pthread
-./part_b

@@ -1,8 +1,0 @@
-gcc disk_scheduling.c -o disk
-./disk
-
-Sample input:
-Requests: 8
-Queue: 98 183 37 122 14 124 65 67
-Head: 53
-Disk size: 200

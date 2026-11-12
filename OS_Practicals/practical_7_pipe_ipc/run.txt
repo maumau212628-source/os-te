@@ -1,4 +1,0 @@
-gcc pipe_ipc.c -o pipe_ipc
-./pipe_ipc
-
-When asked for the pathname, type: sample.txt
