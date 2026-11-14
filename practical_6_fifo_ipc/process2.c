@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -9,19 +10,15 @@
 
 int main()
 {
-    char text[1000];
-    char result[1000];
-    int fd1, fd2, n, i;
-    int chars = 0;
-    int words = 0;
-    int lines = 0;
-    int inword = 0;
+    char text[1000], result[200];
+    int fd1, fd2, i, n;
+    int chars = 0, words = 0, lines = 0, inword = 0;
     FILE *fp;
 
     mkfifo(FIFO1, 0666);
     mkfifo(FIFO2, 0666);
 
-    printf("Process 2 is waiting for data...\n");
+    printf("Waiting for data...\n");
 
     fd1 = open(FIFO1, O_RDONLY);
     n = read(fd1, text, sizeof(text) - 1);
@@ -31,22 +28,16 @@ int main()
     for (i = 0; text[i] != '\0'; i++)
     {
         if (text[i] == '\n')
-        {
             lines++;
-        }
         else
-        {
             chars++;
-        }
 
         if (text[i] == ' ' || text[i] == '\n')
-        {
             inword = 0;
-        }
         else if (inword == 0)
         {
-            inword = 1;
             words++;
+            inword = 1;
         }
     }
 
@@ -63,7 +54,7 @@ int main()
     write(fd2, result, strlen(result));
     close(fd2);
 
-    printf("Result saved in result.txt and sent to Process 1\n");
+    printf("Result saved and sent to Process 1.\n");
 
     return 0;
 }
