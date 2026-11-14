@@ -3,7 +3,7 @@
 
 int main()
 {
-    int n, m, i, j, count = 0;
+    int n, m, i, j, count = 0, found;
     int alloc[10][10], max[10][10], need[10][10];
     int avail[10], finish[10] = {0}, safe[10];
 
@@ -15,47 +15,70 @@ int main()
 
     printf("Enter Allocation matrix:\n");
     for (i = 0; i < n; i++)
+    {
         for (j = 0; j < m; j++)
+        {
             scanf("%d", &alloc[i][j]);
+        }
+    }
 
     printf("Enter Max matrix:\n");
     for (i = 0; i < n; i++)
+    {
         for (j = 0; j < m; j++)
+        {
             scanf("%d", &max[i][j]);
+        }
+    }
 
     printf("Enter Available resources:\n");
     for (j = 0; j < m; j++)
+    {
         scanf("%d", &avail[j]);
+    }
 
     for (i = 0; i < n; i++)
+    {
         for (j = 0; j < m; j++)
+        {
             need[i][j] = max[i][j] - alloc[i][j];
+        }
+    }
 
     while (count < n)
     {
+        found = 0;
+
         for (i = 0; i < n; i++)
         {
             if (finish[i] == 0)
             {
                 for (j = 0; j < m; j++)
+                {
                     if (need[i][j] > avail[j])
+                    {
                         break;
+                    }
+                }
 
                 if (j == m)
                 {
                     for (j = 0; j < m; j++)
+                    {
                         avail[j] += alloc[i][j];
+                    }
 
                     safe[count] = i;
                     count++;
                     finish[i] = 1;
+                    found = 1;
                 }
             }
         }
 
-        if (i == n && count < n)
+        if (found == 0)
         {
-            printf("Deadlock possible. System is UNSAFE.\n");
+            printf("System is UNSAFE.\n");
             return 0;
         }
     }
@@ -64,7 +87,9 @@ int main()
     printf("Safe sequence: ");
 
     for (i = 0; i < n; i++)
+    {
         printf("P%d ", safe[i]);
+    }
 
     return 0;
 }
