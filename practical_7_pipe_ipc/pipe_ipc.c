@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -6,8 +7,7 @@
 
 int main()
 {
-    int p1[2];
-    int p2[2];
+    int p1[2], p2[2];
     int n, fd, pid;
     char path[100];
     char buf[1000];
@@ -28,13 +28,12 @@ int main()
         write(p1[1], path, strlen(path) + 1);
         close(p1[1]);
 
-        printf("\nContents of file received from child:\n");
-        while ((n = read(p2[0], buf, sizeof(buf))) > 0)
-        {
-            write(1, buf, n);
-        }
-        close(p2[0]);
+        printf("\nContents of file:\n");
 
+        n = read(p2[0], buf, sizeof(buf));
+        write(1, buf, n);
+
+        close(p2[0]);
         wait(NULL);
     }
     else if (pid == 0)
@@ -49,15 +48,13 @@ int main()
 
         if (fd < 0)
         {
-            strcpy(buf, "Error: file not found\n");
+            strcpy(buf, "File not found\n");
             write(p2[1], buf, strlen(buf));
         }
         else
         {
-            while ((n = read(fd, buf, sizeof(buf))) > 0)
-            {
-                write(p2[1], buf, n);
-            }
+            n = read(fd, buf, sizeof(buf));
+            write(p2[1], buf, n);
             close(fd);
         }
 
