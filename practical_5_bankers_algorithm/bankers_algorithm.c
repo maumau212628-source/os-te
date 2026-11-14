@@ -1,117 +1,70 @@
+
 #include <stdio.h>
 
 int main()
 {
-    int n, m, i, j, k;
-    int alloc[10][10];
-    int max[10][10];
-    int need[10][10];
-    int avail[10];
-    int finish[10];
-    int safe[10];
-    int count = 0;
-    int found;
-    int can_run;
+    int n, m, i, j, count = 0;
+    int alloc[10][10], max[10][10], need[10][10];
+    int avail[10], finish[10] = {0}, safe[10];
 
     printf("Enter number of processes: ");
     scanf("%d", &n);
 
-    printf("Enter number of resource types: ");
+    printf("Enter number of resources: ");
     scanf("%d", &m);
 
     printf("Enter Allocation matrix:\n");
     for (i = 0; i < n; i++)
-    {
         for (j = 0; j < m; j++)
-        {
             scanf("%d", &alloc[i][j]);
-        }
-    }
 
     printf("Enter Max matrix:\n");
     for (i = 0; i < n; i++)
-    {
         for (j = 0; j < m; j++)
-        {
             scanf("%d", &max[i][j]);
-        }
-    }
 
-    printf("Enter Available resources: ");
+    printf("Enter Available resources:\n");
     for (j = 0; j < m; j++)
-    {
         scanf("%d", &avail[j]);
-    }
 
     for (i = 0; i < n; i++)
-    {
-        finish[i] = 0;
         for (j = 0; j < m; j++)
-        {
             need[i][j] = max[i][j] - alloc[i][j];
-        }
-    }
-
-    printf("\nNeed matrix:\n");
-    for (i = 0; i < n; i++)
-    {
-        for (j = 0; j < m; j++)
-        {
-            printf("%d ", need[i][j]);
-        }
-        printf("\n");
-    }
 
     while (count < n)
     {
-        found = 0;
-
         for (i = 0; i < n; i++)
         {
             if (finish[i] == 0)
             {
-                can_run = 1;
-
                 for (j = 0; j < m; j++)
-                {
                     if (need[i][j] > avail[j])
-                    {
-                        can_run = 0;
-                    }
-                }
+                        break;
 
-                if (can_run == 1)
+                if (j == m)
                 {
-                    for (k = 0; k < m; k++)
-                    {
-                        avail[k] = avail[k] + alloc[i][k];
-                    }
+                    for (j = 0; j < m; j++)
+                        avail[j] += alloc[i][j];
+
                     safe[count] = i;
                     count++;
                     finish[i] = 1;
-                    found = 1;
                 }
             }
         }
 
-        if (found == 0)
+        if (i == n && count < n)
         {
-            printf("\nSystem is in UNSAFE state (deadlock possible)\n");
+            printf("Deadlock possible. System is UNSAFE.\n");
             return 0;
         }
     }
 
-    printf("\nSystem is in SAFE state\n");
+    printf("System is SAFE.\n");
     printf("Safe sequence: ");
+
     for (i = 0; i < n; i++)
-    {
-        printf("P%d", safe[i]);
-        if (i < n - 1)
-        {
-            printf(" -> ");
-        }
-    }
-    printf("\n");
+        printf("P%d ", safe[i]);
 
     return 0;
 }
