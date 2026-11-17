@@ -1,149 +1,137 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
-int cur;
-int total;
+int cur, total;
 
-void move(int to)
+void move(int x)
 {
-    total = total + abs(to - cur);
-    cur = to;
+    total = total + abs(x - cur);
+    cur = x;
     printf(" -> %d", cur);
 }
 
 void sort(int a[], int n)
 {
-    int i, j, temp;
-    for (i = 0; i < n - 1; i++)
+    int t;
+
+    for (int i = 0; i < n; i++)
     {
-        for (j = 0; j < n - 1 - i; j++)
+        for (int j = 0; j < n - 1; j++)
         {
             if (a[j] > a[j + 1])
             {
-                temp = a[j];
+                t = a[j];
                 a[j] = a[j + 1];
-                a[j + 1] = temp;
+                a[j + 1] = t;
             }
         }
     }
 }
 
-void sstf(int req[], int n, int head)
+void sstf(int a[], int n, int head)
 {
-    int done[50];
-    int i, c;
-    int pos = 0;
-    int min;
+    int done[50], min, pos;
 
-    for (i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++)
         done[i] = 0;
-    }
 
-    total = 0;
     cur = head;
-    printf("\nSSTF seek sequence: %d", head);
+    total = 0;
 
-    for (c = 0; c < n; c++)
+    printf("\nSSTF: %d", head);
+
+    for (int i = 0; i < n; i++)
     {
         min = 9999;
-        for (i = 0; i < n; i++)
+
+        for (int j = 0; j < n; j++)
         {
-            if (done[i] == 0 && abs(req[i] - cur) < min)
+            if (done[j] == 0)
             {
-                min = abs(req[i] - cur);
-                pos = i;
+                if (abs(a[j] - cur) < min)
+                {
+                    min = abs(a[j] - cur);
+                    pos = j;
+                }
             }
         }
+
         done[pos] = 1;
-        move(req[pos]);
+        move(a[pos]);
     }
 
-    printf("\nSSTF total head movement = %d\n", total);
+    printf("\nTotal movement = %d\n", total);
 }
 
-void scan(int req[], int n, int head, int size)
+void scan(int a[], int n, int head, int size)
 {
-    int i;
-
-    total = 0;
     cur = head;
-    printf("\nSCAN seek sequence: %d", head);
+    total = 0;
 
-    for (i = 0; i < n; i++)
+    printf("\nSCAN: %d", head);
+
+    for (int i = 0; i < n; i++)
     {
-        if (req[i] >= head)
-        {
-            move(req[i]);
-        }
+        if (a[i] >= head)
+            move(a[i]);
     }
 
     move(size - 1);
 
-    for (i = n - 1; i >= 0; i--)
+    for (int i = n - 1; i >= 0; i--)
     {
-        if (req[i] < head)
-        {
-            move(req[i]);
-        }
+        if (a[i] < head)
+            move(a[i]);
     }
 
-    printf("\nSCAN total head movement = %d\n", total);
+    printf("\nTotal movement = %d\n", total);
 }
 
-void clook(int req[], int n, int head)
+void clook(int a[], int n, int head)
 {
-    int i;
-
-    total = 0;
     cur = head;
-    printf("\nC-LOOK seek sequence: %d", head);
+    total = 0;
 
-    for (i = 0; i < n; i++)
+    printf("\nC-LOOK: %d", head);
+
+    for (int i = 0; i < n; i++)
     {
-        if (req[i] >= head)
-        {
-            move(req[i]);
-        }
+        if (a[i] >= head)
+            move(a[i]);
     }
 
-    for (i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        if (req[i] < head)
-        {
-            move(req[i]);
-        }
+        if (a[i] < head)
+            move(a[i]);
     }
 
-    printf("\nC-LOOK total head movement = %d\n", total);
+    printf("\nTotal movement = %d\n", total);
 }
 
 int main()
 {
-    int n, i, head, size;
-    int req[50];
+    int a[50], n, head, size;
 
     printf("Enter number of requests: ");
     scanf("%d", &n);
 
     printf("Enter request queue: ");
-    for (i = 0; i < n; i++)
-    {
-        scanf("%d", &req[i]);
-    }
+    for (int i = 0; i < n; i++)
+        scanf("%d", &a[i]);
 
     printf("Enter initial head position: ");
     scanf("%d", &head);
 
-    printf("Enter disk size (total cylinders): ");
+    printf("Enter disk size: ");
     scanf("%d", &size);
 
-    sstf(req, n, head);
+    sort(a, n);
 
-    sort(req, n);
-
-    scan(req, n, head, size);
-    clook(req, n, head);
+    sstf(a, n, head);
+    scan(a, n, head, size);
+    clook(a, n, head);
 
     return 0;
 }
